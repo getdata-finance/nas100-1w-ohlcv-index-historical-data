@@ -4,7 +4,7 @@
 
 ### -> [**Download the full NAS100 dataset on getdata.finance**](https://getdata.finance/datasets/nas100)
 
-**NAS100 1w OHLCV index historical data** — ultra high-quality 1w OHLCV for **NASDAQ 100**. Clean `time, open, high, low, close, volume` CSV for backtesting, algorithmic trading and quantitative research.
+**NAS100 1w OHLCV index historical data** — ultra high-quality 1w OHLCV for **NASDAQ 100**. Clean `datetime, open, high, low, close, volume` CSV for backtesting, algorithmic trading and quantitative research.
 
 ## Table of contents
 
@@ -22,12 +22,12 @@
 ## Why this dataset?
 
 - **Ultra high-quality 1w OHLCV** for **NASDAQ 100** (Index)
-- **Clean CSV schema** — `time, open, high, low, close, volume` (no gaps in formatting)
+- **Clean CSV schema** — `datetime, open, high, low, close, volume` (no gaps in formatting)
 - **Free evaluation sample** on GitHub (`1w`) · **11 timeframes** on [getdata.finance](https://getdata.finance/datasets/nas100) · **2,170** `1w` rows in the full archive
 - Built for **backtesting**, **algorithmic trading** and **quantitative finance** workflows
 - **Weekly refresh** — [getdata.finance](https://getdata.finance) every **Saturday, 8am UTC+0**; GitHub `1w` sample updated in sync
 
-> **Sample on GitHub** · `NAS100_1w.csv` (8 rows, `2026-07-09` -> `2026-08-27`, 0.65 KB). **Full archive on [getdata.finance](https://getdata.finance/datasets/nas100)** — **2,170** `1w` rows (full `1m`: 5,592,542), **11 timeframes**, `1985-01-31` -> `2026-08-27`.
+> **Sample on GitHub** · `NAS100_1w.csv` (8 rows, `2026-07-09` -> `2026-08-27`, 0.66 KB). **Full archive on [getdata.finance](https://getdata.finance/datasets/nas100)** — **2,170** `1w` rows (full `1m`: 5,592,542), **11 timeframes**, `1985-01-31` -> `2026-08-27`.
 
 ## Download sample
 
@@ -46,7 +46,7 @@ Full archive & live chart on getdata.finance: **[https://getdata.finance/dataset
 | Instrument | NASDAQ 100 · Index | NASDAQ 100 · Index |
 | Timeframes | `1w` (sample) | **11** — 1m · 3m · 5m · 15m · 30m · 1H · 4H · 12H · 1D · 3D · 1W |
 | 1w rows | 8 | **2,170** |
-| Size | 0.65 KB | full ZIP on [getdata.finance](https://getdata.finance/datasets/nas100) |
+| Size | 0.66 KB | full ZIP on [getdata.finance](https://getdata.finance/datasets/nas100) |
 | Period | `2026-07-09` -> `2026-08-27` | `1985-01-31` -> `2026-08-27` |
 | File | `NAS100_1w.csv` | ZIP on [getdata.finance](https://getdata.finance/datasets/nas100) |
 | Coverage report | — | [NAS100 coverage](https://getdata.finance/coverage/nas100) |
@@ -73,7 +73,7 @@ First and latest rows from the GitHub sample **`NAS100_1w.csv`**:
 
 **First rows**
 
-| time | open | high | low | close | volume |
+| datetime | open | high | low | close | volume |
 | --- | --- | --- | --- | --- | --- |
 | 2026-07-09T00:00:00+00:00 | 29746.18 | 30022.44 | 28916.3 | 29015.22 | 18129749 |
 | 2026-07-16T00:00:00+00:00 | 29015.22 | 29220 | 27847.08 | 28598.68 | 20682722 |
@@ -83,7 +83,7 @@ First and latest rows from the GitHub sample **`NAS100_1w.csv`**:
 
 **Last rows**
 
-| time | open | high | low | close | volume |
+| datetime | open | high | low | close | volume |
 | --- | --- | --- | --- | --- | --- |
 | 2026-07-30T00:00:00+00:00 | 28222.39 | 29966.81 | 27965.84 | 29400.88 | 15114707 |
 | 2026-08-06T00:00:00+00:00 | 29400.88 | 30187.18 | 29356.26 | 30129.36 | 9930926 |
@@ -95,7 +95,7 @@ First and latest rows from the GitHub sample **`NAS100_1w.csv`**:
 
 | Column | Description |
 | --- | --- |
-| `time` | Bar open timestamp (UTC, ISO-8601). |
+| `datetime` | Bar open timestamp (UTC, ISO-8601). |
 | `open` | Opening price of the candlestick bar. |
 | `high` | Highest price during the bar. |
 | `low` | Lowest price during the bar. |
@@ -103,7 +103,7 @@ First and latest rows from the GitHub sample **`NAS100_1w.csv`**:
 | `volume` | Tick volume (number of price updates) during the bar. |
 
 ```text
-time,open,high,low,close,volume
+datetime,open,high,low,close,volume
 ```
 
 ## Code examples
@@ -113,8 +113,8 @@ time,open,high,low,close,volume
 ```python
 import pandas as pd
 
-df = pd.read_csv('NAS100_1w.csv', parse_dates=['time'])
-df.set_index('time', inplace=True)
+df = pd.read_csv('NAS100_1w.csv', parse_dates=['datetime'])
+df.set_index('datetime', inplace=True)
 print(df.describe())
 ```
 
@@ -124,8 +124,8 @@ print(df.describe())
 import backtrader as bt
 import pandas as pd
 
-df = pd.read_csv('NAS100_1w.csv', parse_dates=['time'])
-df.set_index('time', inplace=True)
+df = pd.read_csv('NAS100_1w.csv', parse_dates=['datetime'])
+df.set_index('datetime', inplace=True)
 
 class PandasData(bt.feeds.PandasData):
     params = (('datetime', None), ('open', 'open'), ('high', 'high'),
@@ -143,8 +143,8 @@ cerebro.adddata(PandasData(dataname=df))
 import pandas as pd
 import vectorbt as vbt
 
-df = pd.read_csv('NAS100_1w.csv', parse_dates=['time'])
-close = df.set_index('time')['close']
+df = pd.read_csv('NAS100_1w.csv', parse_dates=['datetime'])
+close = df.set_index('datetime')['close']
 fast, slow = vbt.MA.run(close, 10), vbt.MA.run(close, 50)
 entries = fast.ma_crossed_above(slow)
 exits = fast.ma_crossed_below(slow)
